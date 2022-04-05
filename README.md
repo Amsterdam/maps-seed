@@ -11,3 +11,7 @@ We seed the following maps:
     tiled using a MapProxy seed configuration that consumes from the Mapserver WMS and writes to a volume mount. The contents of this volume mount is then written to an objectstore.
 - 2 luchtfotos tiled manually by adding TIF files and running shell scripts, then uploaded using rclone
 - 3 infrarood follows the same procedure as 2
+
+# Architecture context
+
+![map project architecture](architecture.png "Architecture")
