@@ -1,0 +1,52 @@
+MAP
+  NAME "LUFO"
+  INCLUDE "header.inc"
+
+  WEB
+    METADATA
+      "ows_title"    "LUFO"
+      "ows_abstract" "Luchtfoto's van het grondgebied van de gemeente Amsterdam"
+    END
+  END
+
+  CONFIG "CPL_VSIL_CURL_ALLOWED_EXTENSIONS" ".tif .ovr"
+  CONFIG "GDAL_DISABLE_READDIR_ON_OPEN"     "TRUE"
+
+  #-------------------------------------------------------------------
+  # UITVOERFORMATEN
+  #-------------------------------------------------------------------
+
+  OUTPUTFORMAT
+    NAME "GTiff"
+    DRIVER GDAL/GTiff
+    MIMETYPE "image/tiff"
+    IMAGEMODE RGB
+    EXTENSION "tif"
+  END
+
+  #=============================================================================
+  # LAYERS
+  #============================================================================= 
+
+  LAYER
+    NAME            "lufo-TILE"
+    GROUP           "lufo"
+    TILEINDEX       "/mnt/lufo/imagery.shp"
+    TILEITEM        "location"
+    TYPE            RASTER
+    PROJECTION
+    # Can also use AUTO to get the projection from the .prj file
+    # Uncomment the following line to tile webmercator files
+     #  "init=epsg:3857"
+      "init=epsg:28992"
+    END
+
+    METADATA
+      "ows_title"           "lufo-tile"
+      "ows_group_title"     "lufo"
+      "ows_abstract"        "Luchtfoto's voor Tiling van het grondgebied van de gemeente Amsterdam"
+    END
+  END
+
+# =============================================================================
+END

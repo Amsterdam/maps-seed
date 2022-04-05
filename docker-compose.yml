@@ -1,0 +1,108 @@
+version: '3.0'
+services:
+  database:
+    image: amsterdam/postgres11
+    environment:
+      POSTGRES_PASSWORD: insecure
+      POSTGRES_USER: postgres
+    extra_hosts:
+      admin.datapunt.amsterdam.nl: 10.99.157.24
+#    volumes:
+#     - "~/.ssh/datapunt.key:/root/.ssh/datapunt.key"
+
+  mapserver:
+    build: ./mapserver
+    user: root
+    environment:
+      BAG_DB_HOST: database
+      BAG_DB_USER: postgres
+      BASISKAART_DB_HOST: database
+      BASISKAART_DB_USER: postgres
+      BAG_V11_DB_NAME: bag_v11
+      BAG_V11_DB_USER: postgres
+      BAG_V11_DB_PASSWORD: insecure
+      BAG_V11_DB_HOST: database
+      MAP_URL: "http://mapserver"
+      LEGEND_URL: "http://mapserver"
+
+  topo_rd:
+    build: ./mapproxy
+    user: root
+    links:
+      - mapserver
+      - database
+    command: >
+      mapproxy-seed -c 1 -s /app/seed.yaml -f /app/seeding.yaml --seed=topo_rd_kbk,topo_rd_bgt
+    volumes:
+      - "/mnt/tiles:/mnt/tiles"
+
+  topo_rd_light:
+    build: ./mapproxy
+    user: root
+    links:
+      - mapserver
+      - database
+    command: >
+      mapproxy-seed -c 1 -s /app/seed.yaml -f /app/seeding.yaml --seed=topo_rd_light_kbk,topo_rd_light_bgt
+    volumes:
+      - "/mnt/tiles:/mnt/tiles"
+
+  topo_rd_zw:
+    build: ./mapproxy
+    user: root
+    links:
+      - mapserver
+      - database
+    command: >
+      mapproxy-seed -1 2 -s /app/seed.yaml -f /app/seeding.yaml --seed=topo_rd_zw_kbk,topo_rd_zw_bgt
+    volumes:
+      - "/mnt/tiles:/mnt/tiles"
+
+  topo_wm:
+    build: ./mapproxy
+    user: root
+    links:
+      - mapserver
+      - database
+    command: >
+      mapproxy-seed -c 1 -s /app/seed.yaml -f /app/seeding.yaml --seed=topo_wm_kbk,topo_wm_bgt
+    volumes:
+      - "/mnt/tiles:/mnt/tiles"
+
+  topo_wm_light:
+    build: ./mapproxy
+    user: root
+    links:
+      - mapserver
+      - database
+    command: >
+      mapproxy-seed -c 1 -s /app/seed.yaml -f /app/seeding.yaml --seed=topo_wm_light_kbk,topo_wm_light_bgt
+    volumes:
+      - "/mnt/tiles:/mnt/tiles"
+
+  topo_wm_zw:
+    build: ./mapproxy
+    user: root
+    links:
+      - mapserver
+      - database
+    command: >
+      mapproxy-seed -c 1 -s /app/seed.yaml -f /app/seeding.yaml --seed=topo_wm_zw_kbk,topo_wm_zw_bgt
+    volumes:
+      - "/mnt/tiles:/mnt/tiles"
+
+  topo-lufo:
+    build: ./mapproxy
+    user: root
+    command: >
+      mapproxy-seed -c 1 -s /app/seed.yaml -f /app/seeding.yaml --seed=lufo_rd
+    volumes:
+      - "/mnt/tiles:/mnt/tiles"
+
+  topo-lufo-wm:
+    build: ./mapproxy
+    user: root
+    command: >
+      mapproxy-seed -c 4 -s /app/seed.yaml -f /app/seeding.yaml --seed=lufo_wm
+    volumes:
+      - "/mnt/tiles:/mnt/tiles"

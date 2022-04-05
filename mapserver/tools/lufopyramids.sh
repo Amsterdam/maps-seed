@@ -6,8 +6,8 @@
 # 1. Place the TIF files in the source directory
 # 2. Create pyramids in the destination directory using this script
 # 3. Upload pyramid results to blob storage
-# 4. Add lufoYYYY.map file
-# 5. Enable lufo layer in lufo.map file
+# 4. Enable lufo layer in ../mapserver/lufo.map or ../mapserver/infrarood.map file
+# 5. Mount the shp-file produced by this script into the mapserver container (see ../docker-compose.yml)
 # 6. Run mapproxy Lufo tiles generation (see mapproxy config)
 # 7. Upload tiles to blob storage
 #

@@ -29,11 +29,9 @@ echo "Create Tileindex"
 gdaltindex $DESTDIR/imagery.shp $DESTDIR/$YEAR/pyramid/0/*.tif
 
 echo "Run Mapserver backend"
-cd ~/code/mapserver
-docker-compose up -d --build --force-recreate map
+docker-compose up -d --build --force-recreate mapserver
 
 echo "Run Mapproxy Tiling"
-cd ~/code/mapproxy
 docker-compose run --rm topo-lufo-wm
 
 echo "Cleanup"
